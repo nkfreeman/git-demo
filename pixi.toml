@@ -1,0 +1,16 @@
+[workspace]
+authors = ["nkfreeman <nkfreeman@cba.ua.edu>"]
+channels = ["conda-forge"]
+name = "git-demo"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = "3.13.*"
+polars = ">=1.35.1,<2"
+pyarrow = ">=22.0.0,<23"
+marimo = ">=0.17.8,<0.18"
+matplotlib = ">=3.10.8,<4"
+seaborn = ">=0.13.2,<0.14"
