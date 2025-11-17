@@ -16,7 +16,7 @@ def _():
     import seaborn as sns
 
     sns.set_style('whitegrid')
-    return pathlib, pl, socket
+    return pathlib, pl, sns, socket
 
 
 @app.cell
@@ -34,7 +34,7 @@ def _(pathlib, socket):
 
 
 @app.cell
-def _(dropbox_data_directory, pathlib, pl):
+def _(dropbox_data_directory, pathlib, pl, sns):
     data_filepath = pathlib.Path(
         dropbox_data_directory,
         'ad_data.parquet',
@@ -46,12 +46,18 @@ def _(dropbox_data_directory, pathlib, pl):
         'location_state',
         'post_date',
     ]).agg(
-        pl.col('url').n_unique()
+        number_of_ads = pl.col('url').n_unique()
     ).with_columns(
         location_state = pl.col('location_state').replace({'Rhode-Island': 'Rhode Island'})
     )
 
-    data
+    sns.lineplot(
+        data,
+        x='post_date',
+        y='number_of_ads',
+        hue='location_state',
+        palette='binary'
+    )
     return
 
 
