@@ -16,13 +16,14 @@ def _():
     import seaborn as sns
 
     sns.set_style('whitegrid')
-    return pathlib, pl, socket
+    return pathlib, pl, sns, socket
 
 
 @app.cell
 def _(pathlib, socket):
     dropbox_data_directory_mapper = {
         'nkf-precision-7865': pathlib.Path('/home/nick/Dropbox/git-demo-data/'),
+        'nkf-dell-mobile-workstation': pathlib.Path('/home/nick/Dropbox/git-demo-data/'),
     }
 
     current_hostname = socket.gethostname()
@@ -46,12 +47,22 @@ def _(dropbox_data_directory, pathlib, pl):
         'location_state',
         'post_date',
     ]).agg(
-        pl.col('url').n_unique()
+        unique_urls = pl.col('url').n_unique()
     ).with_columns(
         location_state = pl.col('location_state').replace({'Rhode-Island': 'Rhode Island'})
     )
+    return (data,)
 
-    data
+
+@app.cell
+def _(data, sns):
+    sns.lineplot(
+        data,
+        x='post_date',
+        y='unique_urls',
+        hue='location_state',
+        palette='viridis',
+    )
     return
 
 
